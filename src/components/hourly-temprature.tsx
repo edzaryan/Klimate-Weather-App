@@ -1,14 +1,8 @@
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
-import { format } from "date-fns";
 import type { ForecastData } from "@/api/types";
+import { format } from "date-fns";
+
 
 interface HourlyTemperatureProps {
   data: ForecastData;

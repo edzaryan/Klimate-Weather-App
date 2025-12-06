@@ -1,10 +1,6 @@
+import type { WeatherData, ForecastData, GeocodingResponse, Coordinates } from "./types";
 import { API_CONFIG } from "./config";
-import type {
-    WeatherData,
-    ForecastData,
-    GeocodingResponse,
-    Coordinates,
-} from "./types";
+
 
 class WeatherAPI {
     private createUrl(endpoint: string, params: Record<string, string | number>) {

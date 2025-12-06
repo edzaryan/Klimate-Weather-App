@@ -1,14 +1,14 @@
 import { useForecastQuery, useReverseGeocodeQuery, useWeatherQuery } from "@/hooks/use-weather";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { HourlyTemperature } from "@/components/hourly-temperature";
+import { WeatherForecast } from "@/components/weather-forecast";
 import { MapPin, AlertTriangle, RefreshCw } from "lucide-react";
-import { useGeolocation } from "@/hooks/use-geolocation";
+import { CurrentWeather } from "@/components/current-weather";
+import { WeatherDetails } from "@/components/weather-details";
+import { FavoriteCities } from "@/components/favorite-cities";
 import WeatherSkeleton from "@/components/loading-skeleton";
-import { HourlyTemperature } from "@/components/hourly-temperature.tsx";
-import { CurrentWeather } from "@/components/current-weather.tsx";
-import {WeatherDetails} from "@/components/weather-details.tsx";
-import {WeatherForecast} from "@/components/weather-forecast.tsx";
-import {FavoriteCities} from "@/components/favorite-cities.tsx";
+import { useGeolocation } from "@/hooks/use-geolocation";
+import { Button } from "@/components/ui/button";
 
 
 export function WeatherDashboard() {
@@ -50,7 +50,7 @@ export function WeatherDashboard() {
                     </Button>
                 </AlertDescription>
             </Alert>
-        );
+        )
     }
 
     if (!coordinates) {
@@ -66,7 +66,7 @@ export function WeatherDashboard() {
                     </Button>
                 </AlertDescription>
             </Alert>
-        );
+        )
     }
 
     const locationName = locationQuery.data?.[0];
@@ -84,7 +84,7 @@ export function WeatherDashboard() {
                     </Button>
                 </AlertDescription>
             </Alert>
-        );
+        )
     }
 
     if (!weatherQuery.data || !forecastQuery.data) {
@@ -125,5 +125,5 @@ export function WeatherDashboard() {
                 </div>
             </div>
         </div>
-    );
+    )
 }

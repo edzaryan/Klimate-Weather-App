@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 
+
 interface SearchHistoryItem {
     id: string;
     query: string;
@@ -63,5 +64,5 @@ export function useSearchHistory() {
         history: historyQuery.data ?? [],
         addToHistory,
         clearHistory,
-    };
+    }
 }

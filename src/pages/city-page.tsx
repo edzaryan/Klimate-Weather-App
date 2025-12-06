@@ -1,13 +1,14 @@
-import { useParams, useSearchParams } from "react-router-dom";
 import { useWeatherQuery, useForecastQuery } from "@/hooks/use-weather";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertTriangle } from "lucide-react";
-import { CurrentWeather } from "@/components/current-weather";
 import { HourlyTemperature } from "@/components/hourly-temperature.tsx";
-import { WeatherDetails } from "../components/weather-details";
 import { WeatherForecast } from "../components/weather-forecast";
-import WeatherSkeleton from "../components/loading-skeleton";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { WeatherDetails } from "../components/weather-details";
+import { useParams, useSearchParams } from "react-router-dom";
+import { CurrentWeather } from "@/components/current-weather";
 import { FavoriteButton } from "@/components/favorite-button";
+import WeatherSkeleton from "../components/loading-skeleton";
+import { AlertTriangle } from "lucide-react";
+
 
 export function CityPage() {
     const [searchParams] = useSearchParams();
@@ -57,5 +58,5 @@ export function CityPage() {
                 </div>
             </div>
         </div>
-    );
+    )
 }
