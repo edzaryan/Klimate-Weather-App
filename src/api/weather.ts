@@ -6,7 +6,7 @@ class WeatherAPI {
     private createUrl(endpoint: string, params: Record<string, string | number>) {
         const searchParams = new URLSearchParams({
             appid: API_CONFIG.API_KEY,
-            ...params,
+            ...params
         });
 
         return `${endpoint}?${searchParams.toString()}`;
@@ -26,7 +26,7 @@ class WeatherAPI {
         const url = this.createUrl(`${API_CONFIG.BASE_URL}/weather`, {
             lat: lat.toString(),
             lon: lon.toString(),
-            units: "metric",
+            units: "metric"
         });
 
         return this.fetchData<WeatherData>(url);
@@ -36,7 +36,7 @@ class WeatherAPI {
         const url = this.createUrl(`${API_CONFIG.BASE_URL}/forecast`, {
             lat: lat.toString(),
             lon: lon.toString(),
-            units: "metric",
+            units: "metric"
         });
 
         return this.fetchData<ForecastData>(url);
@@ -46,7 +46,7 @@ class WeatherAPI {
         const url = this.createUrl(`${API_CONFIG.GEO}/reverse`, {
             lat: lat.toString(),
             lon: lon.toString(),
-            limit: "1",
+            limit: "1"
         });
 
         return this.fetchData<GeocodingResponse[]>(url);
@@ -55,7 +55,7 @@ class WeatherAPI {
     async searchLocations(query: string): Promise<GeocodingResponse[]> {
         const url = this.createUrl(`${API_CONFIG.GEO}/direct`, {
             q: query,
-            limit: "5",
+            limit: "5"
         });
 
         return this.fetchData<GeocodingResponse[]>(url);

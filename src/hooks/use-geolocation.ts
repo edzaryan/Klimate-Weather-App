@@ -1,81 +1,59 @@
-import type { Coordinates } from "@/api/types";
 import { useState, useEffect } from "react";
-
+import type { Coordinates } from "@/api/types";
 
 interface GeolocationState {
-    coordinates: Coordinates | null;
-    error: string | null;
-    isLoading: boolean;
+  coordinates: Coordinates | null;
+  error: string | null;
+  isLoading: boolean;
 }
 
 export function useGeolocation() {
-    const [locationData, setLocationData] = useState<GeolocationState>({
-        coordinates: null,
-        error: null,
-        isLoading: true,
-    });
+  const [state, setState] = useState<GeolocationState>({
+    coordinates: null,
+    error: null,
+    isLoading: true,
+  });
 
-    const getLocation = () => {
-        setLocationData((prev) => ({ ...prev, isLoading: true, error: null }));
+  const setError = (message: string) =>
+    setState({ coordinates: null, error: message, isLoading: false });
 
-        if (!navigator.geolocation) {
-            setLocationData({
-                coordinates: null,
-                error: "Geolocation is not supported by your browser",
-                isLoading: false,
-            });
-            return;
-        }
+  const getLocation = () => {
+    setState((s) => ({ ...s, isLoading: true, error: null }));
 
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                setLocationData({
-                    coordinates: {
-                        lat: position.coords.latitude,
-                        lon: position.coords.longitude,
-                    },
-                    error: null,
-                    isLoading: false,
-                });
-            },
-            (error) => {
-                let errorMessage: string;
+    if (!navigator.geolocation)
+      return setError("Geolocation is not supported by your browser");
 
-                switch (error.code) {
-                    case error.PERMISSION_DENIED:
-                        errorMessage =
-                            "Location permission denied. Please enable location access.";
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        errorMessage = "Location information is unavailable.";
-                        break;
-                    case error.TIMEOUT:
-                        errorMessage = "Location request timed out.";
-                        break;
-                    default:
-                        errorMessage = "An unknown error occurred.";
-                }
+    navigator.geolocation.getCurrentPosition(
+      (pos) =>
+        setState({
+          coordinates: {
+            lat: pos.coords.latitude,
+            lon: pos.coords.longitude,
+          },
+          error: null,
+          isLoading: false,
+        }),
 
-                setLocationData({
-                    coordinates: null,
-                    error: errorMessage,
-                    isLoading: false,
-                });
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 5000,
-                maximumAge: 0,
-            }
-        );
-    };
+      (err) => {
+        const message =
+          err.code === err.PERMISSION_DENIED
+            ? "Location permission denied. Please enable location access."
+            : err.code === err.POSITION_UNAVAILABLE
+            ? "Location information is unavailable."
+            : err.code === err.TIMEOUT
+            ? "Location request timed out."
+            : "An unknown error occurred.";
 
-    useEffect(() => {
-        getLocation();
-    }, []);
+        setError(message);
+      },
 
-    return {
-        ...locationData,
-        getLocation,
-    };
+      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+    );
+  };
+
+  useEffect(() => {
+    getLocation();
+  }, []);
+
+  return { ...state, getLocation };
 }

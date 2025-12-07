@@ -3,68 +3,59 @@ import { useLocalStorage } from "./use-local-storage";
 
 
 export interface FavoriteCity {
-    id: string;
-    name: string;
-    lat: number;
-    lon: number;
-    country: string;
-    state?: string;
-    addedAt: number;
+  id: string;
+  name: string;
+  lat: number;
+  lon: number;
+  country: string;
+  state?: string;
+  addedAt: number;
 }
 
 export function useFavorites() {
-    const [favorites, setFavorites] = useLocalStorage<FavoriteCity[]>(
-        "favorites",
-        []
-    );
-    const queryClient = useQueryClient();
+  const [favorites, setFavorites] = useLocalStorage<FavoriteCity[]>("favorites", []);
+  const queryClient = useQueryClient();
+  const key = ["favorites"];
 
-    const favoritesQuery = useQuery({
-        queryKey: ["favorites"],
-        queryFn: () => favorites,
-        initialData: favorites,
-        staleTime: Infinity, // Since we're managing the data in localStorage
-    });
+  const favoritesQuery = useQuery({
+    queryKey: key,
+    queryFn: () => favorites,
+    initialData: favorites,
+    staleTime: Infinity,
+  });
 
-    const addFavorite = useMutation({
-        mutationFn: async (city: Omit<FavoriteCity, "id" | "addedAt">) => {
-            const newFavorite: FavoriteCity = {
-                ...city,
-                id: `${city.lat}-${city.lon}`,
-                addedAt: Date.now(),
-            };
+  const invalidate = () => queryClient.invalidateQueries({ queryKey: key });
 
-            // Prevent duplicates
-            const exists = favorites.some((fav) => fav.id === newFavorite.id);
-            if (exists) return favorites;
+  const addFavorite = useMutation({
+    mutationFn: async (city: Omit<FavoriteCity, "id" | "addedAt">) => {
+      const id = `${city.lat}-${city.lon}`;
+      if (favorites.some((f) => f.id === id)) return favorites;
 
-            const newFavorites = [...favorites, newFavorite];
-            setFavorites(newFavorites);
-            return newFavorites;
-        },
-        onSuccess: () => {
-            // Invalidate and refetch
-            queryClient.invalidateQueries({ queryKey: ["favorites"] });
-        },
-    });
+      const newFavorites = [
+        ...favorites,
+        { ...city, id, addedAt: Date.now() },
+      ];
 
-    const removeFavorite = useMutation({
-        mutationFn: async (cityId: string) => {
-            const newFavorites = favorites.filter((city) => city.id !== cityId);
-            setFavorites(newFavorites);
-            return newFavorites;
-        },
-        onSuccess: () => {
-            // Invalidate and refetch
-            queryClient.invalidateQueries({ queryKey: ["favorites"] });
-        },
-    });
+      setFavorites(newFavorites);
+      return newFavorites;
+    },
+    onSuccess: invalidate,
+  });
 
-    return {
-        favorites: favoritesQuery.data,
-        addFavorite,
-        removeFavorite,
-        isFavorite: (lat: number, lon: number) =>
-            favorites.some((city) => city.lat === lat && city.lon === lon),
-    };
+  const removeFavorite = useMutation({
+    mutationFn: async (cityId: string) => {
+      const newFavorites = favorites.filter((c) => c.id !== cityId);
+      setFavorites(newFavorites);
+      return newFavorites;
+    },
+    onSuccess: invalidate,
+  });
+
+  return {
+    favorites: favoritesQuery.data,
+    addFavorite,
+    removeFavorite,
+    isFavorite: (lat: number, lon: number) =>
+      favorites.some((c) => c.lat === lat && c.lon === lon),
+  };
 }

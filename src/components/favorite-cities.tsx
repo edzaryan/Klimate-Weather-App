@@ -1,4 +1,3 @@
-// src/components/weather/favorite-cities.tsx
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useWeatherQuery } from "@/hooks/use-weather";
 import { useFavorites } from "@/hooks/use-favorite";
@@ -22,7 +21,7 @@ function FavoriteCityTablet({ id, name, lat, lon, onRemove }: FavoriteCityTablet
 
   const handleClick = () => {
     navigate(`/city/${name}?lat=${lat}&lon=${lon}`);
-  };
+  }
 
   return (
     <div
@@ -34,14 +33,14 @@ function FavoriteCityTablet({ id, name, lat, lon, onRemove }: FavoriteCityTablet
       <Button
         variant="ghost"
         size="icon"
-        className="absolute right-1 top-1 h-6 w-6 rounded-full p-0  hover:text-destructive-foreground group-hover:opacity-100"
+        className="absolute right-1 top-1 h-6 w-6 rounded-full p-0 hover:text-destructive-foreground group-hover:opacity-100"
         onClick={(e) => {
           e.stopPropagation();
           onRemove(id);
           toast.error(`Removed ${name} from Favorites`);
         }}
       >
-        <X className="h-4 w-4" />
+        <X className="w-4 h-4 text-gray-700 dark:text-gray-200" />
       </Button>
 
       {isLoading ? (

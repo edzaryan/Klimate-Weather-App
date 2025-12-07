@@ -32,7 +32,7 @@ export function CitySearch() {
 
     setOpen(false);
     navigate(`/city/${name}?lat=${lat}&lon=${lon}`);
-  };
+  }
 
   return (
     <>
@@ -66,15 +66,11 @@ export function CitySearch() {
                     onSelect={handleSelect}
                   >
                     <Star className="mr-2 h-4 w-4 text-yellow-500" />
-                    <span>{city.name}</span>
+                    <span>{city.name},</span>
                     {city.state && (
-                      <span className="text-sm text-muted-foreground">
-                        , {city.state}
-                      </span>
+                      <span className="text-sm text-muted-foreground">{city.state}</span>
                     )}
-                    <span className="text-sm text-muted-foreground">
-                      , {city.country}
-                    </span>
+                    <span className="text-sm text-muted-foreground">{city.country}</span>
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -105,18 +101,12 @@ export function CitySearch() {
                       onSelect={handleSelect}
                     >
                       <Clock className="mr-2 h-4 w-4 text-muted-foreground" />
-                      <span>{item.name}</span>
+                      <span>{item.name},</span>
                       {item.state && (
-                        <span className="text-sm text-muted-foreground">
-                          , {item.state}
-                        </span>
+                        <span className="text-sm text-muted-foreground">{item.state}</span>
                       )}
-                      <span className="text-sm text-muted-foreground">
-                        , {item.country}
-                      </span>
-                      <span className="ml-auto text-xs text-muted-foreground">
-                        {format(item.searchedAt, "MMM d, h:mm a")}
-                      </span>
+                      <span className="text-sm text-muted-foreground">{item.country}</span>
+                      <span className="ml-auto text-xs text-muted-foreground">{format(item.searchedAt, "MMM d, h:mm a")}</span>
                     </CommandItem>
                   ))}
                 </CommandGroup>
